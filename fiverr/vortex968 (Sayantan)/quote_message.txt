@@ -1,0 +1,17 @@
+Hey Sayantan (vortex)!
+
+I'm designing some gear for a prototype EEG setup (for personal usage) and I'm creating a circuit that can handle 80 different electrodes! 
+
+I have done some designing, looking at other projects, etc, so I can build some foundation on the layout, design and flow of the individual systems in the full setup. However, i am now at the stage of actually implementing it into a circuit and building said prototypes.
+
+The electrodes alternate in positive charges, negative charges and targeted reading according to some repeating pattern. I don't mind if this repeating pattern is automated in hardware (which tbh would be difficult), but if it is not automated then an additional muxing + memory system, or alternative, would have to be added so I can change the mux and demuxes according to software to select electrodes.
+
+As a side note, the signals that are processed through this system will be entering into an arduino UNO's analog pins, so if its multi-processed or single per-reading processing, it'd be greatly appreciated to have square pins for wires to stick into.
+
+I'm attaching some basic ideas of what i've come up with for this circuit, but i just wanted to see if you were happy designing something this large (and complex?) and putting together a circuit board that can handle these electrodes.
+
+Have a look at the attached media for the designs / concept.
+
+NOTE: right now i'm only looking at *managing* the electrodes themselves and not processing data just yet as i will have to change it so i can automate some components.
+
+Regards, Declan [deck-lun]
