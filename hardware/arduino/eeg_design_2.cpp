@@ -19,7 +19,6 @@
 #include <algorithm>
 #include <chrono>
 #include <fstream>
-#include "json.hpp"
 
 const int TOTAL_PINS = 64;
 
@@ -75,28 +74,8 @@ void update_readings( int readings[], int size ) {
 	}
 }
 
-// TODO: setup json file appending
-// https://github.com/aidaneastcott/cpp-stdio-file-wrapper
-void append_to_data_file( uint64_t timestamp, int readings[], int size ) {
-	std::ofstream output_file;
+void send_over_serial( uint64_t timestamp, int readings[] ) {
 
-	JSONObject data = nullptr;
-	bool doesExist = output_file.exists();
-
-	output_file.open("output.json");
-
-	if (doesExist) {
-		// read file
-		// load to json
-		// set variable to item
-	} else {
-		// create blank json data
-	}
-
-	// append data
-
-	// close file
-	output_file.close();
 }
 
 void loop() {
@@ -115,7 +94,8 @@ void loop() {
 
 	// output to file with timestamp
 	uint64_t timestamp = get_time_since_epoch();
-	append_to_data_file( timestamp, READINGS, TOTAL_DATA_PINS );
+	// send over serial
+	send_over_serial( timestamp, readings );
 }
 
 void setup() {
