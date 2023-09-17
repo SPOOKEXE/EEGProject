@@ -1,3 +1,6 @@
 {
-    "board": "arduino:avr:uno"
+    "board": "arduino:avr:uno",
+    "programmer": "arduinoisp",
+    "port": "COM6",
+    "sketch": "arduino\\eeg_design_2\\tests\\arduino_to_python.ino"
 }

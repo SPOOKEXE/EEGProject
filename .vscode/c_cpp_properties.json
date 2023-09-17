@@ -1,0 +1,21 @@
+{
+		"configurations": [
+				{
+						"name": "Win-32",
+						"intelliSenseMode": "msvc-x64",
+						"includePath": [
+								"${workspaceFolder}/**"
+						],
+						"browse": {
+								"limitSymbolsToIncludedHeaders": false,
+								"path": [
+										"C:\\Users\\Declan\\AppData\\Local\\Arduino15\\packages",
+										"C:\\Users\\Declan\\AppData\\Local\\Arduino15\\libraries",
+										"${workspaceRoot}\\hardware\\arduino\\libraries",
+										"${workspaceRoot}"
+								]
+						}
+				}
+		],
+		"version": 4
+}

@@ -1,1 +1,4 @@
-pySerialTransfer
+pyserial
+cv2
+matplotlib
+pybluez2
