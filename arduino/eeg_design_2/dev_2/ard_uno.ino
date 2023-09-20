@@ -1,8 +1,4 @@
-#include "BluetoothSerial.h"
 
-#if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
-#error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
-#endif
 
 #define BIT(n, i) (n >> i & 1);
 
@@ -35,8 +31,6 @@ const int MUX_SELECT_DELAY_MS = 10;
 bool readingCycleEnabled = false;
 // total data pins
 int TOTAL_DATA_PINS = 0;
-// bluetooth
-BluetoothSerial SerialBT;
 
 // select using bits
 void set_mux_select(int s1, int s2, int s3, int s4, int s5, int s6) {
@@ -91,20 +85,18 @@ void update_readings(int readings[], int length) {
 }
 
 // handle incoming python
-void handle_incoming_command(String command) {
+void handle_incoming_command( String command ) {
 	if (command == COMMAND_START_READER) {
 		readingCycleEnabled = true;
 	} else if (command == COMMAND_STOP_READER) {
 		readingCycleEnabled = false;
 	} else if (command == COMMAND_GET_DATA_PINS) {
-		SerialBT.print("[");
 		for (int pin_index = 0; pin_index < TOTAL_PINS; pin_index++) {
-			SerialBT.print(PINS_TYPES[pin_index]);
-			SerialBT.print(",");
+			Serial.print(PINS_TYPES[pin_index]);
+			Serial.print(",");
 		}
-		SerialBT.println("]");
+		Serial.println("");
 	}
-
 }
 
 // handle sending readings
@@ -117,20 +109,15 @@ void send_readings_to_python() {
 	update_readings(readings, TOTAL_DATA_PINS);
 
 	// output the readings
-	SerialBT.print("[");
 	for (int index = 0; index < TOTAL_DATA_PINS; index++) {
-		SerialBT.print(readings[index]);
-		SerialBT.print(",");
+		Serial.print(readings[index]);
+		Serial.print(",");
 	}
-	SerialBT.println("]");
+	Serial.print("\n");
 }
 
 void setup() {
-	SerialBT.begin(115200);
-	SerialBT.setTimeout(1);
-
-	SerialBT.begin("EEGBluetooth");
-	Serial.println("Bluetooth started - pairing with bluetooth is possible!");
+	Serial.begin(115200);
 
 	// set analog 0 as input
 	pinMode(A0, INPUT);
@@ -151,8 +138,9 @@ void setup() {
 
 void loop() {
 	// read incoming data
-	if (SerialBT.available() > 2) {
-		String value = SerialBT.readStringUntil('\n');
+	if (Serial.available() > 2) {
+		String value = Serial.readStringUntil('\n');
+		// Serial.println(value);
 		handle_incoming_command(value);
 	}
 

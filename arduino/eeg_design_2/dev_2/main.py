@@ -1,7 +1,8 @@
 
 import serial
-import time
 import json
+import time
+import re
 
 class Commands:
 	START_READER = 'x1'
@@ -11,6 +12,7 @@ class Commands:
 class Arduino:
 
 	def __init__( self, port='COM6', baudrate=115200, timeout=0.1 ):
+		self.charBuffer = []
 		self.arduino = serial.Serial(
 			port=port,
 			baudrate=baudrate,
@@ -18,7 +20,7 @@ class Arduino:
 		)
 
 	def write_lines( self, value : str ) -> None:
-		self.arduino.writelines([ bytes(value, 'utf-8') ])
+		self.arduino.writelines([ bytes(value + "\n", 'utf-8') ])
 
 	def read_line( self ) -> str:
 		return self.arduino.read_until("\n").decode('utf-8')
@@ -29,13 +31,26 @@ class Arduino:
 		return self.read_line()
 
 	def request_data_pins( self ) -> str:
-		return self.write_read( self, Commands.GET_DATA_PINS )
+		value = self.write_read( Commands.GET_DATA_PINS )
+		while value.find(",") == -1:
+			time.sleep(0.1)
+			value = self.write_read( Commands.GET_DATA_PINS )
+		items = value.replace("\n", "").replace("\r", "").split(",")[1:][:-1]
+		return [ int(value) for value in items ] 
 
 	def start_reading( self ) -> None:
 		self.write_lines( Commands.START_READER )
 
 	def stop_reading( self ) -> None:
 		self.write_lines( Commands.STOP_READER )
+
+	def read_readings( self ) -> list:
+		value = self.read_line()
+		while value.find(",") == -1:
+			time.sleep(0.1)
+			value = self.read_line()
+		value = value.replace("\r", "").replace("\n", "")
+		return [ int(value) for value in value.split(",") if value != "" ]
 
 class Dataset:
 
@@ -55,7 +70,7 @@ class Dataset:
 
 	def serialize( self ) -> str:
 		return json.dumps(self.data)
-	
+
 	def deserialize( self, encoded : str ) -> None:
 		self.data = json.loads( encoded )
 
@@ -63,17 +78,17 @@ def eeg_arduino_runtime() -> None:
 
 	arduino = Arduino()
 
-	# read the data pin layout
-	result = arduino.request_data_pins( )
-	print(result)
+	result = arduino.request_data_pins()
+	print( result )
 
-	# enable readings mode
+	dataset = Dataset()
+
 	arduino.start_reading( )
-
-	# output readings
 	while True:
-		out = arduino.read_line()
-		print(out)
+		readings = arduino.read_readings()
+		dataset.write( time.time_ns(), readings )
+		print( len(readings), readings )
+		time.sleep(0.5)
 
 if __name__ == '__main__':
 	eeg_arduino_runtime()
