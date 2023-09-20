@@ -1,4 +1,0 @@
-
-https://www.arduino.cc/reference/en/
-
-https://github.com/ivankravets/StandardCplusplus

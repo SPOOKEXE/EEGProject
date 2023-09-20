@@ -1,0 +1,9 @@
+
+# Arduino Documentation
+https://www.arduino.cc/reference/en/
+
+# C++ Standard Library for Arduino
+https://github.com/ivankravets/StandardCplusplus
+
+# Data Compression
+https://github.com/pfalcon/uzlib
