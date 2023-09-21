@@ -2,7 +2,7 @@
 import serial
 import json
 import time
-import re
+import pendulum
 
 class Commands:
 	START_READER = 'x1'
@@ -56,6 +56,7 @@ class Dataset:
 
 	def __init__(self):
 		self.data = [ ]
+		self.timestamp = pendulum.now('UTC')
 
 	def write( self, timestamp : float, readings : list ) -> None:
 		self.data.append( (timestamp, readings) )
@@ -69,10 +70,13 @@ class Dataset:
 		return values.copy() # disallow editing of source data
 
 	def serialize( self ) -> str:
-		return json.dumps(self.data)
+		# TODO: dunno if datetime works properly
+		return json.dumps({ "dateUTC" : self.timestamp.to_iso8601_string(), "data" : self.data })
 
 	def deserialize( self, encoded : str ) -> None:
-		self.data = json.loads( encoded )
+		decoded : dict = json.loads( encoded )
+		self.timestamp = self.timestamp.fromisoformat( decoded.get("dateUTC") )
+		self.data = decoded.get('data')
 
 def eeg_arduino_runtime() -> None:
 
