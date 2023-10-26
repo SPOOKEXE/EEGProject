@@ -1,0 +1,21 @@
+
+Mux08xx:
+--------
+Vcc: 10 -> 36V
+Vss: -10 -> -36V
+ANALOGS: -20 -> 20V
+LOGICS: -4 -> 4V
++-25mA
+
+
+
+
+MUX36:
+------
+Vcc: 10 -> 36V
+Vss: -5 -> -18V
+ANALOGS -2V -> 2V
+LOGICS: -0.3V -> 0.3V
++-25mA
+
+(experiment at: ANALOG: 9V, LOGICS: 2V)
